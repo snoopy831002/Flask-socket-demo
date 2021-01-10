@@ -1,32 +1,61 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html>
 <head>
-    <title>Flask/Gevent WebSocket Test</title>
-    <script type="text/javascript" src="http://code.jquery.com/jquery-1.4.2.min.js"></script>
-    <script type="text/javascript" charset="utf-8">
-        $(document).ready(function(){
-            $('form').submit(function(event){
-                ws.send($('#data').val())
-                return false;
-            });
-            if ("WebSocket" in window) {
-                ws = new WebSocket("ws://" + document.domain + ":5000/api");
-                ws.onmessage = function (msg) {
-                    $("#log").append("<p>"+msg.data+"</p>")
-                };
-            } else {
-                alert("WebSocket not supported");
-            }
-        });
-    </script>
+<script>
+var ws;
+
+function myFunction() {
+
+       ws = new WebSocket("ws://localhost:8000/echo");
+
+       ws.onopen = function() {
+           // open websocket and display socket connected state
+           document.getElementById("conn_status").style.display="flex";
+           ws.send("socket open");
+       };
+
+       ws.onclose = function(evt) {
+           // disable socekt connected state went socket closed
+           document.getElementById("conn_status").style.display="none";
+       };
+
+       ws.onmessage = function(evt) {
+           // append message to webpage when receive from server
+           var para = document.createElement("p");
+           para.style.display="flex";
+           para.innerHTML=">"+evt.data
+           document.getElementById("chat").appendChild(para);
+       };
+}
+
+function sendText(text) {
+        ws.send(text);
+}
+</script>
+<style>
+.dot {
+  height: 25px;
+  width: 25px;
+  background-color: #00FF00;
+  border-radius: 50%;
+  display: inline-block;
+}
+</style>
 </head>
+
 <body>
-    <h1>Send:</h1>
-    <form method='POST' action='#'>
-        <textarea name='data' id="data"></textarea>
-        <div><input type='submit'></div>
-    </form>
-    <h1>Receive:</h1>
-    <div id="log"></div>
+    <h1>這是一個與機器人聊天的網站</h1>
+    <p id="demo">跟聊天機器人溝通可以獲得你想要的資訊</p>
+    <div id="conn_status" style="display: none;">
+        <span class="dot"></span>
+        <p>已連線</p>
+    </div>
+
+    <button type="button" onclick="myFunction()">點我聊天</button>
+    <input type="text" id="lname" name="lname"><br><br>
+    <input type="submit" value="Submit" onclick="sendText(document.getElementById('lname').value)">
+
+    <div id="chat" style=""></div>
+
 </body>
 </html>

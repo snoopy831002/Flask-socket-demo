@@ -10,7 +10,10 @@ sockets = Sockets(app)
 def echo_socket(ws):
     while True:
         message = ws.receive()
-        ws.send(message[::-1])
+        if(message == "socket open"):
+            ws.send("歡迎使用客服機器人")
+        else:
+            ws.send(message)
 
 @app.route('/')
 def hello():
