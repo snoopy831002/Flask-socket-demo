@@ -2,8 +2,8 @@
 <html>
 <head>
 <script>
-var ws;
 
+var ws;
 function myFunction() {
 
        ws = new WebSocket("ws://localhost:8000/echo");
@@ -28,6 +28,11 @@ function myFunction() {
        };
 }
 
+window.onload=function(){
+    myFunction()
+}
+
+
 function sendText(text) {
         ws.send(text);
 }
@@ -44,14 +49,13 @@ function sendText(text) {
 </head>
 
 <body>
-    <h1>這是一個與機器人聊天的網站</h1>
+    <h1>這是一個即時更新留言板</h1>
     <p id="demo">跟聊天機器人溝通可以獲得你想要的資訊</p>
     <div id="conn_status" style="display: none;">
         <span class="dot"></span>
         <p>已連線</p>
     </div>
 
-    <button type="button" onclick="myFunction()">點我聊天</button>
     <input type="text" id="lname" name="lname"><br><br>
     <input type="submit" value="Submit" onclick="sendText(document.getElementById('lname').value)">
 
